@@ -1,17 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+  <h1>To-Do List</h1>
+  <ul>
+    <li>
+      <!-- label是给prop里的label赋值 -->
+      <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
+     <to-do-item label="My Todo Item" :done="false"></to-do-item>
+    </li>
+  </ul>
+</div>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import ToDoItem from "./components/ToDoItem.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    ToDoItem,
+  },
+};
 </script>
 
 <style>
