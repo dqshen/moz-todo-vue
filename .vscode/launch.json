@@ -7,25 +7,6 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "vuejs: chrome at once",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}/src",
-            "breakOnLoad": true,
-            "pathMapping": {
-                "/_karma_webpack_": "${workspaceFolder}"
-            },
-            "sourceMapPathOverrides": {
-                "webpack:/*": "${webRoot}/*",
-                "/./*": "${webRoot}/*",
-                "/src/*": "${webRoot}/*",
-                "/*": "*",
-                "/./~/*": "${webRoot}/node_modules/*"
-            },
-            "preLaunchTask": "serve"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
             "name": "vuejs: chrome",
             "url": "http://localhost:8080",
             "webRoot": "${workspaceFolder}",
