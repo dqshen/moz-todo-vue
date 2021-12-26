@@ -7,10 +7,13 @@
       <!-- 回调函数可以从methods里获取 -->
       <to-do-form @todo-added="addToDo"></to-do-form>
       <!-- 用 v-for ... in ... 语法创建item枚举后,li下的属性都可以用item以及它的子属性赋值了,赋值时需要用v-bind语法转义-->
+      <!-- v-for会不断扫描列表中的对象，根据列表实际内容更新li列表 -->
+      <!-- key属性是vue中配合v-for语法的自有属性，当vue在v-for遍历中创建li对象时需要从列表中取到每个对象的一个唯一id用于前后比较-->
       <li v-for="item in ToDoItems" :key="item.id">
         <!-- label是给prop里的label赋值 -->
         <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
-        <to-do-item :label="item.label" :done="item.done"></to-do-item>
+        <!-- 把v-for用来进行key值检查的item.id赋值给id属性，便于检查定位创建的li对象 -->
+        <to-do-item :label="item.label" :done="item.done" :id="item.id"></to-do-item>
       </li>
     </ul>
   </div>
