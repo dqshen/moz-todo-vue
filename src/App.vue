@@ -42,8 +42,9 @@ export default {
     };
   },
   methods: {
-    addToDo() {
+    addToDo(toDoLabel) {
       console.log("To-do added");
+      this.ToDoItems.push({id:uniqueid("todo-"), label: toDoLabel, done: false});
     },
   },
 };
