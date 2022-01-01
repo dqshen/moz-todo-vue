@@ -5,7 +5,9 @@
   <!-- 这些语法配置包括.stop .prevent .self .key .native .once .left .right .middle .passive-->
   <!-- .prevent相当于在js的事件回调中加入event.preventDefault()语句，阻止控件执行默认方法 -->
   <form @submit.prevent="onSubmit">
-    <label for="new-todo-input"> What needs to be done? </label>
+    <h2 class="label-wrapper">
+      <label for="new-todo-input"> What needs to be done? </label>
+    </h2>
     <!-- v-model是vue中串联模型model与视图view的语法 -->
     <!-- 模型对应脚本中data()里声明的数据对象，视图就是template里的界面元素 而vue框架在这里起到控制器的作用 -->
     <!-- v-model的具体作用是把视图内容通过控制器绑定到具体的模型对象上，让模型对象的数据随着用户在视图的交互更新 -->
@@ -19,7 +21,7 @@
       autocomplete="off"
       v-model.lazy.trim="label"
     />
-    <button type="submit">Add</button>
+    <button type="submit" class="btn btn__primary btn__lg">Add</button>
   </form>
 </template>
 <script>
@@ -35,7 +37,7 @@ export default {
       //  创建的CustomEvent会围绕第二个参数构建事件体，此处的事件体就是一个string对象，用dispatchEvent发出事件
       //  由于组件一般会被上级组件引用，通过event bubbling机制，事件最终会被别的组件监听器接收处理
       this.$emit("todo-added", this.label);
-      this.label="";
+      this.label = "";
     },
   },
   data() {
