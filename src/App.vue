@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <h1>To-Do List</h1>
-    <ul>
+    <!-- aria-labelledby是ARIA无障碍功能用的属性 -->
+    <ul aria-labelledby="list-summary" class="stack-large">
       <!-- v-on语法可以为自定义事件绑定回调 -->
       <!-- 这里绑定的自定义事件是todo-added，等价于ele.addEventListenr('todo-added',...)语句 -->
       <!-- 回调函数可以从methods里获取 -->
