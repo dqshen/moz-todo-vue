@@ -20,6 +20,7 @@
       name="new-todo"
       autocomplete="off"
       v-model.lazy.trim="label"
+      class="input__lg"
     />
     <button type="submit" class="btn btn__primary btn__lg">Add</button>
   </form>
@@ -30,9 +31,9 @@ export default {
   methods: {
     onSubmit() {
       console.log("Label value: ", this.label);
-      /* if (this.label === "") {
+      if (this.label === "") {
         return;
-      } */
+      }
       //  vue的$emit语法能够创建并发出一个事件，与js中CustomEvent创建过程等效
       //  创建的CustomEvent会围绕第二个参数构建事件体，此处的事件体就是一个string对象，用dispatchEvent发出事件
       //  由于组件一般会被上级组件引用，通过event bubbling机制，事件最终会被别的组件监听器接收处理
