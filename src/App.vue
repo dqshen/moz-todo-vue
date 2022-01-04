@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <h1>To-Do List</h1>
+    <!-- 标签的text content除了可以用{{}}语法获取props里的内容以外，还可以用{{}}语法获取computed的内容 -->
+    <h2 id="list-summary" >{{ listSummary }}</h2>
     <!-- aria-labelledby是ARIA无障碍功能用的属性 -->
     <ul aria-labelledby="list-summary" class="stack-large">
       <!-- v-on语法可以为自定义事件绑定回调 -->
@@ -65,6 +67,12 @@ export default {
       toDoToUpdate.done = !toDoToUpdate.done;
     },
   },
+  computed: {
+    listSummary() {
+      const numberFinishedItems = this.ToDoItems.filter(
+        (item) => item.done
+      ).length;
+      return `${numberFinishedItems} out of ${this.ToDoItems.length} items completed`;
     },
   },
 };
