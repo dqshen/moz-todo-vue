@@ -14,7 +14,13 @@
         <!-- label是给prop里的label赋值 -->
         <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
         <!-- 把v-for用来进行key值检查的item.id赋值给id属性，便于检查定位创建的li对象 -->
-        <to-do-item :label="item.label" :done="item.done" :id="item.id"></to-do-item>
+        <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的updateDoneStatus方法绑定，方便在App.vue这个scope处理一些事情 -->
+        <to-do-item
+          :label="item.label"
+          :done="item.done"
+          :id="item.id"
+          @checkbox-changed="updateDoneStatus(item.id)"
+        ></to-do-item>
       </li>
     </ul>
   </div>
@@ -48,7 +54,17 @@ export default {
   methods: {
     addToDo(toDoLabel) {
       console.log("To-do added");
-      this.ToDoItems.push({id:uniqueid("todo-"), label: toDoLabel, done: false});
+      this.ToDoItems.push({
+        id: uniqueid("todo-"),
+        label: toDoLabel,
+        done: false,
+      });
+    },
+    updateDoneStatus(toDoId) {
+      const toDoToUpdate = this.ToDoItems.find((item) => item.id === toDoId);
+      toDoToUpdate.done = !toDoToUpdate.done;
+    },
+  },
     },
   },
 };
