@@ -1,7 +1,7 @@
 <template>
   <div class="custom-checkbox">
     <!-- html中的input是一个labelable标签（一个表单元素），它的id值会将它与上下文中用for标记了相同id值的label绑定-->
-    <!-- 使用前缀v-bind:或者简写前缀:将标签的attribute与一个data()里的绑定关联 -->
+    <!-- 使用前缀v-bind:或者简写前缀:将标签的attribute与一个data()里的对象关联 -->
     <input type="checkbox" class="checkbox" :id="id" v-bind:checked="isDone" />
     <!-- 使用{{ }}语法可以在template标签的内容位置调用注册在props里的字段 -->
     <!-- label的for属性用来标记它的id值，这个id值将它与第一个有相同id值的labelable对象绑定 -->
