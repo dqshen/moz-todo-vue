@@ -1,5 +1,6 @@
 <template>
-  <div class="stack-small">
+<!-- v-if和v-else语法，需要在同级别连续的标签使用，判断的对象是来自data()声明的对象 -->
+  <div class="stack-small" v-if="!isEditing">
     <div class="custom-checkbox">
       <!-- html中的input是一个labelable标签（一个表单元素），它的id值会将它与上下文中用for标记了相同id值的label绑定-->
       <!-- 使用前缀v-bind:或者简写前缀:将标签的attribute与一个data()里的对象关联 -->
@@ -25,9 +26,15 @@
       </button>
     </div>
   </div>
+  <to-do-item-edit-form v-else :id="id" :label="label"></to-do-item-edit-form>
 </template>
 <script>
+/* 引用ToDoItemEditForm,作为component在template中使用 */
+import ToDoItemEditForm from "./ToDoItemEditForm.vue";
 export default {
+  components: {
+    ToDoItemEditForm,
+  },
   // props是专门用于存放属性值prop的标签，这种声明的特点是可以给每个prop增加约束条件
   // props与组件的构建有关，和类的实例无关，类似于类的构造函数的参数
   //    type: 告知vue cli这个prop的类型，方便检查语法错误，仅在开发阶段有效
