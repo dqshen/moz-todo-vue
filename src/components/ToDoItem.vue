@@ -1,5 +1,6 @@
 <template>
-<!-- v-if和v-else语法，需要在同级别连续的标签使用，判断的对象是来自data()声明的对象 -->
+  <!-- v-if和v-else语法，需要在同级别连续的标签使用，判断的对象是来自data()声明的对象 -->
+  <!-- v-if判断条件是在data()中声明的isEditing,它被修改后v-if判断会立即生效 -->
   <div class="stack-small" v-if="!isEditing">
     <div class="custom-checkbox">
       <!-- html中的input是一个labelable标签（一个表单元素），它的id值会将它与上下文中用for标记了相同id值的label绑定-->
@@ -26,7 +27,16 @@
       </button>
     </div>
   </div>
-  <to-do-item-edit-form v-else :id="id" :label="label"></to-do-item-edit-form>
+  <!-- v-else标记的元素需要紧接在v-if标记的元素后，同理还有v-else-if -->
+  <!-- @item-edited事件从ToDoItemEditForm发出，在这里用itemEdited回调响应 -->
+  <!-- @edit-cancelled事件从ToDoItemEditForm发出，在这里用editCancelled回调响应 -->
+  <to-do-item-edit-form
+    v-else
+    :id="id"
+    :label="label"
+    @item-edited="itemEdited"
+    @edit-cancelled="editCancelled"
+  ></to-do-item-edit-form>
 </template>
 <script>
 /* 引用ToDoItemEditForm,作为component在template中使用 */
@@ -60,7 +70,17 @@ export default {
       this.$emit("item-deleted");
     },
     toggleToItemEditForm() {
+      // 点击Edit触发方法，修改标志值isEditing，从v-if分支切换到v-else分支显示ToDoItemEditForm
       this.isEditing = true;
+    },
+    itemEdited(newLabel) {
+      this.$emit("item-edited", newLabel);
+      // 由ToDoItemEditForm触发，修改标志值isEditing，从v-else语法切换到v-if分支显示ToDoItem本身的div
+      this.isEditing = false;
+    },
+    editCancelled() {
+      // 由ToDoItemEditForm触发，修改标志值isEditing，从v-else语法切换到v-if分支显示ToDoItem本身的div
+      this.isEditing = false;
     },
   },
 };
