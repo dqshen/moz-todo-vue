@@ -2,7 +2,7 @@
   <div id="app">
     <h1>To-Do List</h1>
     <!-- 标签的text content除了可以用{{}}语法获取props里的内容以外，还可以用{{}}语法获取computed的内容 -->
-    <h2 id="list-summary" >{{ listSummary }}</h2>
+    <h2 id="list-summary">{{ listSummary }}</h2>
     <!-- aria-labelledby是ARIA无障碍功能用的属性 -->
     <ul aria-labelledby="list-summary" class="stack-large">
       <!-- v-on语法可以为自定义事件绑定回调 -->
@@ -17,11 +17,15 @@
         <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
         <!-- 把v-for用来进行key值检查的item.id赋值给id属性，便于检查定位创建的li对象 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的updateDoneStatus方法绑定，方便在App.vue这个scope处理一些事情 -->
+        <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的deleteToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
+        <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的editToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
         <to-do-item
           :label="item.label"
           :done="item.done"
           :id="item.id"
           @checkbox-changed="updateDoneStatus(item.id)"
+          @item-deleted="deleteToDo(item.id)"
+          @item-edited="editToDo(item.id, $event)"
         ></to-do-item>
       </li>
     </ul>
@@ -65,6 +69,14 @@ export default {
     updateDoneStatus(toDoId) {
       const toDoToUpdate = this.ToDoItems.find((item) => item.id === toDoId);
       toDoToUpdate.done = !toDoToUpdate.done;
+    },
+    deleteToDo(toDoId) {
+      const itemIndex = this.ToDoItems.findIndex((item) => item.id === toDoId);
+      this.ToDoItems.splice(itemIndex, 1);
+    },
+    editToDo(toDoId, newLabel) {
+      const toDoToEdit = this.ToDoItems.find((item) => item.id === toDoId);
+      toDoToEdit.label = newLabel;
     },
   },
   computed: {
