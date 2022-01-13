@@ -61,7 +61,9 @@ export default {
     return {
       // 定义一个名为isDone的对象，并且用props里的done进行赋值，类似于类的构造函数在创建类的实例时，给类的对象赋值
       // template中需要使用v-bind:语法调用这个对象，调用时这个对象已经通过框架赋值完毕
-      isDone: this.done,
+      // data中对象的赋值过程只在component创建时发生一次，所以如果component已经创建后，v-if/v-else切换，component中会再读一次isDone
+      //                                               即使this.done已经被更改过了，isDone还会是一开始的赋值，这会导致bug
+      // isDone: this.done,
       isEditing: false,
     };
   },
@@ -82,6 +84,12 @@ export default {
       // 由ToDoItemEditForm触发，修改标志值isEditing，从v-else语法切换到v-if分支显示ToDoItem本身的div
       this.isEditing = false;
     },
+  },
+  computed: {
+    // 把isDone从负责初始化赋值的data移动到这里，这样每次v-bind语句:checked="isDone"都会重新取一下this.done
+    isDone(){
+      return this.done;
+    }
   },
 };
 </script>
