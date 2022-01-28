@@ -18,8 +18,17 @@
       <!-- 可以有多个label有相同的for值，它们会绑定到同一个labelable标签上 -->
       <label class="checkbox-label" :for="id">{{ label }}</label>
     </div>
+    <!-- ref语法 为DOM的element添加ref属性，可以把这个element注册到当前component的$refs，方便后面在脚本里调用 -->
+    <!-- 比如这个element的脚本调用的方式是this.$refs.editButton -->
+    <!-- 注意这个注册过程是发生在vue对VirtualDOM渲染之后的，所以在开始渲染之前和渲染中调用this.$refs是无效的 -->
+    <!-- 在ToDoItem中，因为有v-if v-else语法把V-DOM分成了两个部分，如果判定为执行v-else分支，是无法用this.$refs找到这个element的 -->
     <div class="btn-group">
-      <button type="button" class="btn" @click="toggleToItemEditForm">
+      <button
+        type="button"
+        class="btn"
+        ref="editButton"
+        @click="toggleToItemEditForm"
+      >
         Edit <span class="visually-hidden">{{ label }}</span>
       </button>
       <button type="button" class="btn btn__danger" @click="deleteToDo">
@@ -72,6 +81,8 @@ export default {
       this.$emit("item-deleted");
     },
     toggleToItemEditForm() {
+      // 通过$refs对象访问已注册的element对象
+      console.log(this.$refs.editButton.style);
       // 点击Edit触发方法，修改标志值isEditing，从v-if分支切换到v-else分支显示ToDoItemEditForm
       this.isEditing = true;
     },
@@ -79,17 +90,27 @@ export default {
       this.$emit("item-edited", newLabel);
       // 由ToDoItemEditForm触发，修改标志值isEditing，从v-else语法切换到v-if分支显示ToDoItem本身的div
       this.isEditing = false;
+      this.focusOnEditButton();
     },
     editCancelled() {
       // 由ToDoItemEditForm触发，修改标志值isEditing，从v-else语法切换到v-if分支显示ToDoItem本身的div
       this.isEditing = false;
+      this.focusOnEditButton();
+    },
+    focusOnEditButton() {
+      // 由于focusOnEditButton执行时，v-if和v-else刚做切换，editButton注册所在的block要在下一个渲染Tick才生效渲染
+      // 所以用$nextTick方法把操作写入回调函数才能正确的获取editButton元素
+      this.$nextTick(() => {
+        const editButtonRef = this.$refs.editButton;
+        editButtonRef.focus();
+      });
     },
   },
   computed: {
     // 把isDone从负责初始化赋值的data移动到这里，这样每次v-bind语句:checked="isDone"都会重新取一下this.done
-    isDone(){
+    isDone() {
       return this.done;
-    }
+    },
   },
 };
 </script>
