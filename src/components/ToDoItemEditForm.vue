@@ -1,20 +1,26 @@
 <template>
-<!-- v-on语法和methods内的方法绑定 -->
-<!-- {{}}语法读取props里的属性字段 -->
-<!-- v-model语法绑定data()中的newLabel对象 -->
+  <!-- v-on语法和methods内的方法绑定 -->
+  <!-- {{}}语法读取props里的属性字段 -->
+  <!-- v-model语法绑定data()中的newLabel对象 -->
   <form class="stack-small" @submit.prevent="onSubmit">
     <div>
-      <label class="edit-label">Edit Name for &quot;{{label}}&quot;</label>
-      <input :id="id" type="text" autocomplete="off" v-model.lazy.trim="newLabel" />
+      <label class="edit-label">Edit Name for &quot;{{ label }}&quot;</label>
+      <input
+        :id="id"
+        type="text"
+        ref="labelInput"
+        autocomplete="off"
+        v-model.lazy.trim="newLabel"
+      />
     </div>
     <div class="btn-group">
       <button type="button" class="btn" @click="onCancel">
         Cancel
-        <span class="visually-hidden">editing {{label}}</span>
+        <span class="visually-hidden">editing {{ label }}</span>
       </button>
       <button type="submit" class="btn btn__primary">
         Save
-        <span class="visually-hidden">edit for {{label}}</span>
+        <span class="visually-hidden">edit for {{ label }}</span>
       </button>
     </div>
   </form>
@@ -24,16 +30,16 @@ export default {
   props: {
     label: {
       type: String,
-      required: true
+      required: true,
     },
     id: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      newLabel: this.label
+      newLabel: this.label,
     };
   },
   methods: {
@@ -44,8 +50,13 @@ export default {
     },
     onCancel() {
       this.$emit("edit-cancelled");
-    }
-  }
+    },
+  },
+  // 框架在组件的生命周期进行到element加载成功后执行mounted方法，这时刚好可以访问$refs
+  mounted() {
+    const labelInputRef = this.$refs.labelInput;
+    labelInputRef.focus();
+  },
 };
 </script>
 <style scoped>
