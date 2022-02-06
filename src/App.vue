@@ -12,17 +12,20 @@
       <!-- 用 v-for ... in ... 语法创建item枚举后,li下的属性都可以用item以及它的子属性赋值了,赋值时需要用v-bind语法转义-->
       <!-- v-for会不断扫描列表中的对象，根据列表实际内容更新li列表 -->
       <!-- key属性是vue中配合v-for语法的自有属性，当vue在v-for遍历中创建li对象时需要从列表中取到每个对象的一个唯一id用于前后比较-->
-      <li v-for="item in ToDoItems" :key="item.id">
+      <!-- vue3以后，对v-for对象用:ref语法不能直接获取内部的DOM对象，更不能获取V-DOM对象，注意下面的setItemRef函数写法 -->
+      <li v-for="item in ToDoItems" :key="item.id" :ref="setItemRef">
         <!-- label是给prop里的label赋值 -->
         <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
         <!-- 把v-for用来进行key值检查的item.id赋值给id属性，便于检查定位创建的li对象 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的updateDoneStatus方法绑定，方便在App.vue这个scope处理一些事情 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的deleteToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的editToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
+        <!-- ref可以在v-for中获取V-DOM对象，但是注意和一般ref不同，这里要用this.$refs[lists]先访问一个V-DOM数组，再从数组中选择某个V-DOM对象 -->
         <to-do-item
           :label="item.label"
           :done="item.done"
           :id="item.id"
+          ref="lists"
           @checkbox-changed="updateDoneStatus(item.id)"
           @item-deleted="deleteToDo(item.id)"
           @item-edited="editToDo(item.id, $event)"
@@ -55,6 +58,7 @@ export default {
         { id: uniqueid("todo-"), label: "Have fun", done: true },
         { id: uniqueid("todo-"), label: "Create a to-do list", done: false },
       ],
+      itemRefs: [],
     };
   },
   methods: {
@@ -69,6 +73,15 @@ export default {
     updateDoneStatus(toDoId) {
       const toDoToUpdate = this.ToDoItems.find((item) => item.id === toDoId);
       toDoToUpdate.done = !toDoToUpdate.done;
+      // ref语法从v-for中获取一个V-DOM数组
+      console.log(this.$refs["lists"]);
+      // 在数组中筛选需要的对象
+      const eurekaItem = this.$refs["lists"].find((el) => el.id === toDoId);
+      // el => el.$attrs["id"] === toDoId
+      console.log(eurekaItem);
+      // 通过ref语法调用子对象的方法
+      eurekaItem.editFocus();
+      eurekaItem.focusOnEditButton();
     },
     deleteToDo(toDoId) {
       const itemIndex = this.ToDoItems.findIndex((item) => item.id === toDoId);
@@ -78,6 +91,19 @@ export default {
       const toDoToEdit = this.ToDoItems.find((item) => item.id === toDoId);
       toDoToEdit.label = newLabel;
     },
+    // 维护itemRefs数组，实现v-for的ref对象
+    setItemRef(el) {
+      console.log(el);
+      this.itemRefs.push(el);
+    },
+  },
+  beforeUpdate() {
+    // 维护itemRefs数组，实现v-for的ref对象
+    this.itemRefs = [];
+  },
+  updated() {
+    // 维护itemRefs数组，实现v-for的ref对象
+    console.log(this.itemRefs);
   },
   computed: {
     listSummary() {

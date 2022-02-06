@@ -112,6 +112,13 @@ export default {
       return this.done;
     },
   },
+  setup() {
+    // 导出一个供父component调用的方法，也可以写在methods里面
+    const editFocus = () => {
+      console.log("Eureka!");
+    };
+    return {editFocus};
+  },
 };
 </script>
 <style scoped>
