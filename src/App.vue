@@ -13,6 +13,7 @@
       <!-- v-for会不断扫描列表中的对象，根据列表实际内容更新li列表 -->
       <!-- key属性是vue中配合v-for语法的自有属性，当vue在v-for遍历中创建li对象时需要从列表中取到每个对象的一个唯一id用于前后比较-->
       <!-- vue3以后，对v-for对象用:ref语法不能直接获取内部的DOM对象，更不能获取V-DOM对象，注意下面的setItemRef函数写法 -->
+      <!-- vue3.2.25版本以后，又能够获取了 可以写作 ref="items",在脚本中用this.$refs.items就可以访问DOM数组-->
       <li v-for="item in ToDoItems" :key="item.id" :ref="setItemRef">
         <!-- label是给prop里的label赋值 -->
         <!-- :done是v-bind:done的缩写，告知vue cli这是给todoitem的prop对象done按照它的类型(boolean)赋值 -->
@@ -20,7 +21,7 @@
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的updateDoneStatus方法绑定，方便在App.vue这个scope处理一些事情 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的deleteToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
         <!-- v-on语法将ToDoItem内部传出的事件响应和methods()中的editToDo方法绑定，方便在App.vue这个scope处理一些事情 -->
-        <!-- ref可以在v-for中获取V-DOM对象，但是注意和一般ref不同，这里要用this.$refs[lists]先访问一个V-DOM数组，再从数组中选择某个V-DOM对象 -->
+        <!-- ref可以在component中获取针对对象的ref，注意和一般DOM对象的ref不同，这里要用this.$refs[lists]先访问一个V-DOM数组，再从数组中选择某个V-DOM对象 -->
         <to-do-item
           :label="item.label"
           :done="item.done"
