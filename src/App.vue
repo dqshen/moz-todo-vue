@@ -63,6 +63,9 @@ export default {
     };
   },
   methods: {
+    callFromExternal(){
+      return this.ToDoItems;
+    },
     addToDo(toDoLabel) {
       console.log("To-do added");
       this.ToDoItems.push({
@@ -114,6 +117,10 @@ export default {
       ).length;
       return `${numberFinishedItems} out of ${this.ToDoItems.length} items completed`;
     },
+  },
+  mounted() {
+    // 在页面上定义一个对象指向App
+    window.test = this;
   },
 };
 </script>
